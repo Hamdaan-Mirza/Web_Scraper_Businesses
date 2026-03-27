@@ -1,8 +1,21 @@
 import requests
 import pandas as pd
 import time
+import os
 
-API_KEY = "AIzaSyCb4vTHYYtTqfQ7FQer-z390cWRVTOYtCI"
+if os.path.exists(".env"):
+    with open(".env", "r", encoding="utf-8") as env_file:
+        for line in env_file:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip())
+
+API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
+if not API_KEY:
+    raise ValueError("GOOGLE_MAPS_API_KEY is not set. Add it to your .env file.")
+
 OUTPUT_FILE = "leads.csv"
 
 SEARCH_QUERY = "roofing contractor"
